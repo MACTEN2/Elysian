@@ -2,11 +2,18 @@
     "Starter Deck": [
         {
             "q": "Welcome to Elysian",
-            "a": "Clear, bold, and focused study."
+            "a": "Generate your flashcards and begin your journey to mastering your knowledge"
+        }
+    ],
+    "Deck 2": [],
+    "data Structure + algoirthm": [
+        {
+            "q": "What is the time complexity of searching an element in a balanced Binary Search Tree?",
+            "a": "$O(\\log n)$"
         },
         {
-            "q": "what is the strongest bone in the body",
-            "a": "Femur"
+            "q": "Which principle does a Stack follow for data access?",
+            "a": "LIFO (Last-In, First-Out)"
         }
     ]
 }
