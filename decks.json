@@ -3,17 +3,45 @@
         {
             "q": "Welcome to Elysian",
             "a": "Generate your flashcards and begin your journey to mastering your knowledge"
+        },
+        {
+            "q": "What is the main function of the nervous system?",
+            "a": "To receive, process, and transmit information throughout the body"
+        },
+        {
+            "q": "What is the central nervous system (CNS)?",
+            "a": "The brain and spinal cord"
+        },
+        {
+            "q": "What is the peripheral nervous system (PNS)?",
+            "a": "All nerves outside the brain and spinal cord"
+        },
+        {
+            "q": "What is a neuron?",
+            "a": "A nerve cell that transmits electrical signals"
+        },
+        {
+            "q": "What is the function of the cerebrum?",
+            "a": "Controls thinking, memory, and voluntary movements"
+        },
+        {
+            "q": "What does the cerebellum control?",
+            "a": "Balance and coordination"
+        },
+        {
+            "q": "What is the function of the brainstem?",
+            "a": "Controls breathing, heartbeat, and basic life functions"
         }
     ],
     "Deck 2": [],
     "data Structure + algoirthm": [
         {
-            "q": "What is the time complexity of searching an element in a balanced Binary Search Tree?",
-            "a": "$O(\\log n)$"
+            "q": "Welcome to Elysian",
+            "a": "Generate your flashcards and begin your journey to mastering your knowledge"
         },
         {
-            "q": "Which principle does a Stack follow for data access?",
-            "a": "LIFO (Last-In, First-Out)"
+            "q": "What is the main function of the nervous system?",
+            "a": "To receive, process, and transmit information throughout the body"
         }
     ]
 }
