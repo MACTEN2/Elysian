@@ -93,3 +93,28 @@ html, body, [class*="css"] {
     color: #FFFFFF !important;
     transform: scale(1.02);
 }
+
+.stTabs [data-baseweb="tab"] {
+    height: 50px;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 4px 4px 0px 0px;
+    gap: 1px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: 600;
+    color: #888;
+}
+
+.stTabs [aria-selected="true"] {
+    color: #1A1A1A !important;
+    border-bottom: 2px solid #1A1A1A !important;
+}
+
+/* Specific styling for the mini-edit rows */
+[data-testid="stVerticalBlock"] [data-testid="stHorizontalBlock"] {
+    background: #ffffff00;
+    padding: 10px;
+    border-radius: 12px;
+    align-items: center;
+}
