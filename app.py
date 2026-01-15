@@ -11,7 +11,7 @@ def load_data():
         try:
             with open(DB_FILE, "r") as f: return json.load(f)
         except: pass
-    return {"Starter Deck": [{"q": "Elysian Pro", "a": "High-impact 3D study mode active."}]}
+    return {"Starter Deck": [{"q": "Elysian Hub", "a": "Custom settings enabled."}]}
 
 def save_data(data):
     with open(DB_FILE, "w") as f:
@@ -32,23 +32,54 @@ if os.path.exists("style.css"):
     with open("style.css") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+
+
 # --- SIDEBAR: COMMAND CENTER ---
 with st.sidebar:
     st.markdown("<h1 class='sidebar-logo'>🗒️ ELYSIAN</h1>", unsafe_allow_html=True)
-    selected_deck = st.selectbox("🗂 ACTIVE COLLECTION", list(st.session_state.decks.keys()))
     
-    with st.expander("➕ NEW COLLECTION"):
-        n_name = st.text_input("Name")
-        if st.button("Create Deck"):
-            if n_name and n_name not in st.session_state.decks:
-                st.session_state.decks[n_name] = []
+    st.divider()
+
+    # COLLECTION MANAGEMENT
+    st.markdown("<p class='sidebar-label'>🗂 COLLECTIONS</p>", unsafe_allow_html=True)
+    selected_deck = st.selectbox("Active Deck", list(st.session_state.decks.keys()))
+    
+    with st.expander("➕ Add New Collection"):
+        new_name = st.text_input("Deck Name", placeholder="e.g. Biology 101")
+        if st.button("Create Collection", use_container_width=True):
+            if new_name and new_name not in st.session_state.decks:
+                st.session_state.decks[new_name] = []
                 save_data(st.session_state.decks)
+                st.success(f"Created {new_name}")
                 st.rerun()
+    
+    # SETTINGS SECTION
+    st.divider()
+    st.markdown("<p class='sidebar-label'>⚙️ SETTINGS & PREFERENCES</p>", unsafe_allow_html=True)
+    with st.expander("Configure Workspace"):
+        # Adjust Daily Goal
+        st.session_state.daily_goal = st.number_input("Daily Card Goal", min_value=1, value=st.session_state.daily_goal)
+        
+        # Adjust Timer Length
+        timer_choice = st.selectbox("Timer Mode", ["25m Pomodoro", "50m Deep Work", "5m Break", "10m Break"])
+        if st.button("Apply Timer Setting"):
+            durations = {"25m Pomodoro": 1500, "50m Deep Work": 3000, "5m Break": 300, "10m Break": 600}
+            st.session_state.timer_seconds = durations[timer_choice]
+            st.session_state.run_timer = False
+            st.rerun()
+
+        st.divider()
+        if st.button("🗑️ CLEAR ALL DECKS", help="This will delete everything!"):
+            st.session_state.decks = {"Starter Deck": []}
+            save_data(st.session_state.decks)
+            st.rerun()
 
     st.divider()
+    
+    # QUICK ADD & AI
     st.markdown("<p class='sidebar-label'>✨ AI MAGIC CREATE</p>", unsafe_allow_html=True)
-    with st.expander("Auto-Generate Stack"):
-        ai_in = st.text_area("Question : Answer", height=100)
+    with st.expander("Auto-Generate"):
+        ai_in = st.text_area("Question : Answer", height=80, key="ai_magic")
         if st.button("Magic Import"):
             for line in ai_in.split('\n'):
                 if ":" in line:
@@ -58,6 +89,8 @@ with st.sidebar:
             st.rerun()
 
     st.divider()
+
+    # FOCUS TIMER
     st.markdown("<p class='sidebar-label'>⏱️ FOCUS SPRINT</p>", unsafe_allow_html=True)
     mins, secs = divmod(st.session_state.timer_seconds, 60)
     st.markdown(f"<div class='timer-box-mini'>{mins:02d}:{secs:02d}</div>", unsafe_allow_html=True)
@@ -74,21 +107,26 @@ with st.sidebar:
         st.session_state.timer_seconds -= 1
         st.rerun()
 
-# --- MAIN CONTENT: THE 3D FLASHCARD ---
+# --- MAIN CONTENT ---
 deck = st.session_state.decks[selected_deck]
-
 if not deck:
     st.info("Collection is empty. Add cards in the sidebar!")
+    with st.expander("➕ Create Card Manually"):
+        mq = st.text_input("Question")
+        ma = st.text_area("Answer")
+        if st.button("Save Card"):
+            st.session_state.decks[selected_deck].append({"q": mq, "a": ma})
+            save_data(st.session_state.decks)
+            st.rerun()
 else:
     current_card = deck[st.session_state.card_idx]
     
-    # Progress Bar
+    # Progress
     goal_pct = min(st.session_state.cards_viewed / st.session_state.daily_goal, 1.0)
     st.progress(goal_pct)
-    st.markdown(f"<p class='progress-text'>{st.session_state.cards_viewed}/{st.session_state.daily_goal} CARDS TOWARD DAILY GOAL</p>", unsafe_allow_html=True)
+    st.markdown(f"<p class='progress-text'>{st.session_state.cards_viewed}/{st.session_state.daily_goal} COMPLETED TODAY</p>", unsafe_allow_html=True)
 
-    # 3D SMOOTH FLIP CARD (HTML/CSS ONLY FOR MAXIMUM SMOOTHNESS)
-    # The 'flip-checkbox' trick allows the user to click the card to rotate it.
+    # 3D CARD
     st.markdown(f"""
         <div class="flip-card-container">
             <input type="checkbox" id="cardFlip" class="flip-checkbox">
@@ -96,18 +134,15 @@ else:
                 <div class="flip-card-front">
                     <span class="card-label">QUESTION</span>
                     <div class="card-content">{current_card['q']}</div>
-                    <span class="card-hint">Tap to see answer</span>
                 </div>
                 <div class="flip-card-back">
                     <span class="card-label">ANSWER</span>
                     <div class="card-content">{current_card['a']}</div>
-                    <span class="card-hint">Tap to see question</span>
                 </div>
             </label>
         </div>
     """, unsafe_allow_html=True)
 
-    # Navigation Controls
     col_prev, col_next = st.columns(2)
     if col_prev.button("← PREVIOUS", use_container_width=True):
         st.session_state.card_idx = (st.session_state.card_idx - 1) % len(deck)
@@ -116,18 +151,3 @@ else:
         st.session_state.card_idx = (st.session_state.card_idx + 1) % len(deck)
         st.session_state.cards_viewed += 1
         st.rerun()
-
-# --- BOTTOM: MANAGER ---
-st.markdown("<br><br><hr>", unsafe_allow_html=True)
-with st.expander("🗂 MANAGE COLLECTION"):
-    for i, card in enumerate(deck):
-        c_q, c_a, c_d = st.columns([2, 2, 0.5])
-        u_q = c_q.text_input(f"Q", value=card['q'], key=f"edit_q{i}", label_visibility="collapsed")
-        u_a = c_a.text_input(f"A", value=card['a'], key=f"edit_a{i}", label_visibility="collapsed")
-        if u_q != card['q'] or u_a != card['a']:
-            st.session_state.decks[selected_deck][i] = {"q": u_q, "a": u_a}
-            save_data(st.session_state.decks)
-        if c_d.button("🗑️", key=f"del_{i}"):
-            st.session_state.decks[selected_deck].pop(i)
-            save_data(st.session_state.decks)
-            st.rerun()

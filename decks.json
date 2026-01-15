@@ -43,5 +43,35 @@
             "q": "What is the main function of the nervous system?",
             "a": "To receive, process, and transmit information throughout the body"
         }
+    ],
+    "circulatory system": [
+        {
+            "q": "What is the main function of the circulatory system?",
+            "a": "To transport oxygen, nutrients, hormones, and waste"
+        },
+        {
+            "q": "What organ pumps blood through the body?",
+            "a": "The heart"
+        },
+        {
+            "q": "What are arteries?",
+            "a": "Blood vessels that carry blood away from the heart"
+        },
+        {
+            "q": "What are veins?",
+            "a": "Blood vessels that carry blood toward the heart"
+        },
+        {
+            "q": "What are capillaries?",
+            "a": "Tiny blood vessels where gas and nutrient exchange occurs"
+        },
+        {
+            "q": "What do red blood cells do?",
+            "a": "Carry oxygen using hemoglobin"
+        },
+        {
+            "q": "What do white blood cells do?",
+            "a": "Fight infections"
+        }
     ]
 }
